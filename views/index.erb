@@ -14,7 +14,7 @@
   </form>
   <ul>
     <% @hash.each_with_index do |n,idx| %>
-      <li><a href="/memos/<%= n[0] %>"><%= p n[1]['title']%></a></li>
+      <li><a href="/memos/<%= n[0] %>"><%= n[1]['title']%></a></li>
     <%end%>
   </ul>
 </body>
