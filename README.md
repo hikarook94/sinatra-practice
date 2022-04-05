@@ -13,4 +13,4 @@ bundle install
 bundle exec ruby ./myapp.rb
 ```
 ## アプリの使用方法
-ブラウザで`http://localhost:4567` にアクセスするとアプリを使用することができます。
+ブラウザで`http://localhost:4567/memos` にアクセスするとアプリを使用することができます。
