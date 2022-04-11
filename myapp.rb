@@ -6,18 +6,18 @@ require 'securerandom'
 require 'erb'
 
 get '/memos' do
-  @hash = File.open('./data.json') { |f| JSON.parse(f.read) }
+  @memos_hash = open_file
   erb :index
 end
 
 post '/memos' do
-  json = File.open('./data.json', 'r') { |f| JSON.parse(f.read) }
+  json = open_file
   index = SecureRandom.uuid
   json[index] = {
-    'title' => ERB::Util.html_escape(params['title']),
-    'content' => ERB::Util.html_escape(params['content'])
+    'title' => params['title'],
+    'content' => params['content']
   }
-  File.open('./data.json', 'w') { |f| JSON.dump(json, f) }
+  write_into_file(json)
   redirect to('/memos')
 end
 
@@ -26,7 +26,7 @@ get '/memos/new' do
 end
 
 get '/memos/:memo_id/edit' do
-  json = File.open('./data.json', 'r') { |f| JSON.parse(f.read) }
+  json = open_file
   @title = json[params['memo_id']]['title']
   json[params['memo_id']]['content']
   @content = json[params['memo_id']]['content']
@@ -34,27 +34,41 @@ get '/memos/:memo_id/edit' do
 end
 
 delete '/memos/:memo_id' do
-  json = File.open('./data.json', 'r') { |f| JSON.parse(f.read) }
+  json = open_file
   json.delete(params['memo_id'])
-  File.open('./data.json', 'w') { |f| JSON.dump(json, f) }
+  write_into_file(json)
   redirect to('/memos')
 end
 
 get '/memos/:memo_id' do
-  json = File.open('./data.json', 'r') { |f| JSON.parse(f.read) }
+  json = open_file
   @title = json[params['memo_id']]['title']
-  @content = json[params['memo_id']]['content'].gsub(/\r\n/, '<br>')
+  @content = json[params['memo_id']]['content']
   erb :show_memo
 end
 
 patch '/memos/:memo_id' do
-  json = File.open('./data.json', 'r') { |f| JSON.parse(f.read) }
-  json[params['memo_id']]['title'] = ERB::Util.html_escape(params['title'])
-  json[params['memo_id']]['content'] = ERB::Util.html_escape(params['content'])
-  File.open('./data.json', 'w') { |f| JSON.dump(json, f) }
+  json = open_file
+  json[params['memo_id']]['title'] = params['title']
+  json[params['memo_id']]['content'] = params['content']
+  write_into_file(json)
   redirect to('/memos')
 end
 
 not_found do
   "404 Not Found : #{env['sinatra.error'].message}"
+end
+
+def open_file
+  File.open('./data.json', 'r') { |f| JSON.parse(f.read) }
+end
+
+def write_into_file(json)
+  File.open('./data.json', 'w') { |f| JSON.dump(json, f) }
+end
+
+helpers do
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
 end

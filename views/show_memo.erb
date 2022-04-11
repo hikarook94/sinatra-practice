@@ -9,8 +9,8 @@
 </head>
 <body>
   <h1>メモアプリ</h1>
-  <div><%= @title%></div>
-    <%= @content %>
+  <div><%= h @title%></div>
+    <%= h(@content).gsub(/\r\n/, '<br>') %>
   <div>
     <form method="GET" action="/memos/<%= params['memo_id'] %>/edit">
       <input type="submit" value="変更">

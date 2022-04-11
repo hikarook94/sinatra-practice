@@ -13,8 +13,8 @@
     <input type="submit" value="追加">
   </form>
   <ul>
-    <% @hash.each_with_index do |n,idx| %>
-      <li><a href="/memos/<%= n[0] %>"><%= n[1]['title']%></a></li>
+    <% @memos_hash.each_with_index do |n,idx| %>
+      <li><a href="/memos/<%= n[0] %>"><%= h n[1]['title']%></a></li>
     <%end%>
   </ul>
 </body>
