@@ -13,10 +13,10 @@
     <input type="hidden" name="id" value="params['memo_id']">
     <input type="hidden" name="_method" value="patch">
     <div>
-      <input type="text" name="title" value="<%= h @title %>">
+      <input type="text" name="title" value="<%= h @title %>" required>
     </div>
     <div>
-      <textarea name="content" cols="30" rows="10"><%= h @content %></textarea>
+      <textarea name="content" cols="30" rows="10" required><%= h @content %></textarea>
     </div>
     <div>
       <input type="submit" value="保存">
